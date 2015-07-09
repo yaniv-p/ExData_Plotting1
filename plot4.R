@@ -1,27 +1,28 @@
-#setClass('myDate')
-#setAs("character","myDate", function(from) as.Date(from, format="%d/%m/%Y")) 
-#setClass('myTime')
-#setAs("character","myTime", function(from) strptime(from, format="%H:%M:%S"))
+library(sqldf) # For the read.csv.sql
+library(dplyr) # for the %>% operation
+Sys.setlocale("LC_TIME", "English") # make sure the format of the date in the plot will be at English
 
-library(sqldf)
-library(dplyr)
-Sys.setlocale("LC_TIME", "English")
+# read the input file, only read records where Date='1/2/2007' or '2/2/2007', avoiding reading whole big file into memory.
+# Also read all fields as charcters in order to avoid read.csv.sql to convert the ? to 0 for numerc fields.
 a<-read.csv.sql('data\\household_power_consumption.txt',sql = "select * from file where Date='1/2/2007' or Date='2/2/2007' ", colClasses = rep("character",9),sep = ';')
+closeAllConnections() # close the connections read.csv.sql used for reading the file
 
-closeAllConnections()
+# now going to convert the number fields from charters to number, making the '?' NA
+b<-subset(a,select = c(Global_active_power:Sub_metering_3)) # get the numeric fields into a new d.f.
+c<-as.data.frame(lapply(b,as.numeric)) # convert them to numeric. This will make and '?' charcter to NA
 
-b<-subset(a,select = c(Global_active_power:Sub_metering_3))
+d<-c %>% cbind(a$Date)  %>% cbind(a$Time) # add the date and time colunms
 
-c<-as.data.frame(lapply(b,as.numeric))
-
-d<-c %>% cbind(a$Date)  %>% cbind(a$Time)
+# set the coluonms names for the added fields
 t<-names(d)
 t[8]<-"Date"
 t[9]="Time"
 names(d)<-t
 
+# add a datetime colunm to the data frame
 d$Date_Time=strptime(paste(d$Date,d$Time),"%d/%m/%Y %H:%M:%S")
 
+#open a png device
 png("plot4.png", width=480, height=480)
 par(mfrow=c(2,2))
 plot(d$Date_Time,d$Global_active_power, xlab = "",ylab = "Global Active Power", type = "l" )
@@ -31,8 +32,8 @@ plot(d$Date_Time,d$Sub_metering_1,type = 'n',ylab = "Energy sub metering",xlab="
 lines(d$Date_Time,d$Sub_metering_1,col="black")
 lines(d$Date_Time,d$Sub_metering_2,col="red")
 lines(d$Date_Time,d$Sub_metering_3,col="blue")
-legend("topright", legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3"),col=c("black","red","blue"),pch="-",lwd=2,cex = 0.65)
+legend("topright", legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3"),col=c("black","red","blue"),pch="-",bty = "n") #,lwd=1,cex = 1
 
-plot(d$Date_Time,d$Global_reactive_power, xlab = "datetime",ylab = "Global_reactive_power", type = "l" )
+plot(d$Date_Time,d$Global_reactive_power, xlab = "datetime",ylab = "Global_reactive_power", type = "l")
 
 dev.off()
