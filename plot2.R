@@ -5,6 +5,7 @@
 
 library(sqldf)
 library(dplyr)
+Sys.setlocale("LC_TIME", "English")
 a<-read.csv.sql('data\\household_power_consumption.txt',sql = "select * from file where Date='1/2/2007' or Date='2/2/2007' ", colClasses = rep("character",9),sep = ';')
 
 closeAllConnections()
