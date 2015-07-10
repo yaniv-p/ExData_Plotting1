@@ -24,7 +24,7 @@ d$Date_Time=strptime(paste(d$Date,d$Time),"%d/%m/%Y %H:%M:%S")
 
 #open a png device
 png("plot4.png", width=480, height=480)
-par(mfrow=c(2,2))
+par(mfrow=c(2,2)) # 2 x 2 graphs
 plot(d$Date_Time,d$Global_active_power, xlab = "",ylab = "Global Active Power", type = "l" )
 plot(d$Date_Time,d$Voltage, xlab = "datetime",ylab = "Voltage", type = "l" )
 

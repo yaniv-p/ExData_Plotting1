@@ -24,5 +24,6 @@ d$Date_Time=strptime(paste(d$Date,d$Time),"%d/%m/%Y %H:%M:%S")
 
 #open a png device
 png("plot2.png", width=480, height=480)
+#plot Global_active_power over time
 plot(d$Date_Time,d$Global_active_power, xlab = "",ylab = "Global Active Power (Kliowatts)", type = "l" )
 dev.off()

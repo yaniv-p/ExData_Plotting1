@@ -24,9 +24,9 @@ d$Date_Time=strptime(paste(d$Date,d$Time),"%d/%m/%Y %H:%M:%S")
 
 #open a png device
 png("plot3.png", width=480, height=480)
-plot(d$Date_Time,d$Sub_metering_1,type = 'n',ylab = "Energy sub metering",xlab="")
-lines(d$Date_Time,d$Sub_metering_1,col="black")
-lines(d$Date_Time,d$Sub_metering_2,col="red")
-lines(d$Date_Time,d$Sub_metering_3,col="blue")
-legend("topright", legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3"),col=c("black","red","blue"),pch="-",lwd=3)
+plot(d$Date_Time,d$Sub_metering_1,type = 'n',ylab = "Energy sub metering",xlab="") #Build the graph outline
+lines(d$Date_Time,d$Sub_metering_1,col="black") #add plot line
+lines(d$Date_Time,d$Sub_metering_2,col="red")   #add plot line
+lines(d$Date_Time,d$Sub_metering_3,col="blue")  #add plot line
+legend("topright", legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3"),col=c("black","red","blue"),pch="-",lwd=3) # add legend
 dev.off()

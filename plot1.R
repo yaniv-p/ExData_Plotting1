@@ -24,7 +24,7 @@ d$Date_Time=strptime(paste(d$Date,d$Time),"%d/%m/%Y %H:%M:%S")
 
 #open a png device
 png("plot1.png", width=480, height=480)
-# plot a histogram
+# plot a histogram on Global_active_power with red color
 hist(d$Global_active_power,col = 'red',main = "Global Active Power",xlab = "Global Active Power (Kliowatts)")
 # close the device
 dev.off()
