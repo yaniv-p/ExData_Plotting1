@@ -2,7 +2,15 @@ library(sqldf) # For the read.csv.sql
 library(dplyr) # for the %>% operation
 Sys.setlocale("LC_TIME", "English") # make sure the format of the date in the plot will be at English
 
-# Assumes that by "Your code file should include code for reading the data so that the plot can be fully reproduced." we need to read it into R and dont need to have the code here for download it
+# Download the files if its not there
+if(!file.exists("data")) {
+  dir.create("data")
+  url<-"https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip"
+  download.file(url=url, destfile="data\\exdata-data-household_power_consumption.zip")
+  unzip("data\\exdata-data-household_power_consumption.zip",exdir = "data")
+}
+
+
 # read the input file, only read records where Date='1/2/2007' or '2/2/2007', avoiding reading whole big file into memory.
 # Also read all fields as charcters in order to avoid read.csv.sql to convert the ? to 0 for numerc fields.
 a<-read.csv.sql('data\\household_power_consumption.txt',sql = "select * from file where Date='1/2/2007' or Date='2/2/2007' ", colClasses = rep("character",9),sep = ';')
